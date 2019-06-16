@@ -1,0 +1,11 @@
+{
+ "name": "nmap-subnet",
+ "version": "1.0.0",
+ "description": "nmap with nodejs",
+ "main": "index.js",
+ "author": "Daniel Forrer",
+ "license": "MIT",
+ "dependencies": {
+  "node-nmap": "^4.0.0"
+ }
+}
