@@ -17,9 +17,9 @@ quickscan.on('complete', function (data){
         if ( !mac )    mac    = '';
         if ( !vendor ) vendor = '';
 
-        line += host + ";";
         line += mac + ";";
-        line += vendor;
+        line += host + ";";
+        line += vendor + ";";
 
         console.log( line );
     }
