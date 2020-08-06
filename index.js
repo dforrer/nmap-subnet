@@ -1,31 +1,44 @@
 const nmap = require('node-nmap');
 
 nmap.nmapLocation = 'nmap'; //default
-var quickscan = new nmap.NmapScan('-sP 192.168.0.0/24');
+let quickscan = new nmap.NmapScan('-sn --min-parallelism 20 --host-timeout 4m 192.168.0.0/20');
 
-quickscan.on('complete', function (data){
-    console.log("Clients found: " + data.length);
+var rv = {
+    num_clients: 0,
+    clients : [],
+    error : 0
+};
 
-    for ( i = 0; i < data.length; i++ ) {
-        var line   = data[i]['ip'] + ";";
+quickscan.on( 'complete', function( data ) {
+    try {
+        rv['num_clients'] = data.length;
 
-        var host   = data[i]['hostname'];
-        var mac    = data[i]['mac'];
-        var vendor = data[i]['vendor'];
+        for ( i = 0; i < data.length; i++ ) {
+            var ip     = data[i]['ip'];
+            var host   = data[i]['hostname'];
+            var mac    = data[i]['mac'];
+            var vendor = data[i]['vendor'];
 
-        if ( !host )   host   = '';
-        if ( !mac )    mac    = '';
-        if ( !vendor ) vendor = '';
+            if ( !host )   host   = '';
+            if ( !mac )    mac    = '';
+            if ( !vendor ) vendor = '';
 
-        line += mac + ";";
-        line += host + ";";
-        line += vendor + ";";
+            var c = {
+                ip : ip,
+                host : host,
+                mac : mac,
+                vendor : vendor
+            };
 
-        console.log( line );
+            rv['clients'].push(c);
+        }
+    } catch (err) {
+        rv['error'] = 1;
     }
-
+    console.log( JSON.stringify(rv) );
 });
 
 quickscan.on('error', function(error){
-  console.log(error);
+    rv['error'] = 2;
+    console.log( JSON.stringify(rv) );
 });
