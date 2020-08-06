@@ -19,6 +19,7 @@ quickscan.on( 'complete', function( data ) {
             var mac    = data[i]['mac'];
             var vendor = data[i]['vendor'];
 
+            if ( !ip )     ip     = '';
             if ( !host )   host   = '';
             if ( !mac )    mac    = '';
             if ( !vendor ) vendor = '';
